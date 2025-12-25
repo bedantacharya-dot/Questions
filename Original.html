@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government School Quiz System | Offline Quiz Maker & Player</title>
+    <style>
+        /* CSS Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --govt-blue: #1e3a8a;
+            --govt-dark-blue: #1e40af;
+            --govt-light-blue: #3b82f6;
+            --govt-cream: #fefce8;
+            --govt-beige: #f5f5dc;
+            --govt-white: #ffffff;
+            --govt-gray: #6b7280;
+            --govt-light-gray: #e5e7eb;
+            --govt-dark-gray: #4b5563;
+            --govt-green: #15803d;
+            --govt-red: #b91c1c;
+            --govt-orange: #ea580c;
+            --govt-yellow: #f59e0b;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --radius-sm: 4px;
+        }
+
+        body {
+            background-color: var(--govt-cream);
+            color: #1f2937;
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 10px;
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 7px, rgba(0,0,0,0.03) 1px, transparent 8px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--govt-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--govt-light-gray);
+            overflow: hidden;
+        }
+
+        /* Government Header Styling */
+        .govt-header {
+            background: linear-gradient(135deg, var(--govt-blue) 0%, var(--govt-dark-blue) 100%);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            border-bottom: 4px solid var(--govt-yellow);
+            position: relative;
+        }
+
+        .govt-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: repeating-linear-gradient(90deg, var(--govt-yellow), var(--govt-yellow) 10px, var(--govt-orange) 10px, var(--govt-orange) 20px);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--govt-yellow);
+        }
+
+        .logo-icon i {
+            font-size: 2rem;
+            color: var(--govt-blue);
+        }
+
+        .logo-text {
+            flex: 1;
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text h2 {
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        .govt-tagline {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-style: italic;
+        }
+
+        /* Navigation Styling */
+        .govt-nav {
+            background-color: var(--govt-beige);
+            border-bottom: 2px solid var(--govt-light-gray);
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .govt-btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+
+        .govt-btn-primary {
+            background-color: var(--govt-blue);
+            color: white;
+            border-color: var(--govt-dark-blue);
+        }
+
+        .govt-btn-primary:hover {
+            background-color: var(--govt-dark-blue);
+        }
+
+        .govt-btn-secondary {
+            background-color: white;
+            color: var(--govt-blue);
+            border: 1px solid var(--govt-light-gray);
+        }
+
+        .govt-btn-secondary:hover {
+            background-color: var(--govt-light-gray);
+        }
+
+        .govt-btn-success {
+            background-color: var(--govt-green);
+            color: white;
+            border-color: #166534;
+        }
+
+        .govt-btn-warning {
+            background-color: var(--govt-yellow);
+            color: #1f2937;
+            border-color: #d97706;
+        }
+
+        .govt-btn-danger {
+            background-color: var(--govt-red);
+            color: white;
+            border-color: #991b1b;
+        }
+
+        .govt-btn-outline {
+            background-color: transparent;
+            color: var(--govt-blue);
+            border: 1px solid var(--govt-blue);
+        }
+
+        .govt-btn-outline:hover {
+            background-color: var(--govt-blue);
+            color: white;
+        }
+
+        .active-nav {
+            background-color: var(--govt-blue) !important;
+            color: white !important;
+            border-color: var(--govt-dark-blue) !important;
+        }
+
+        /* Login Screen */
+        .login-container {
+            max-width: 500px;
+            margin: 3rem auto;
+            background-color: var(--govt-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            border: 1px solid var(--govt-light-gray);
+        }
+
+        .login-container h2 {
+            color: var(--govt-blue);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--govt-yellow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--govt-dark-gray);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--govt-light-gray);
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            background-color: #f9fafb;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--govt-blue);
+            background-color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: #fefce8;
+        }
+
+        .active-content {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .govt-card {
+            background-color: var(--govt-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            transition: transform 0.2s;
+            border: 1px solid var(--govt-light-gray);
+            border-top: 4px solid var(--govt-blue);
+        }
+
+        .govt-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(30, 64, 175, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            border: 2px solid var(--govt-light-blue);
+        }
+
+        .card-icon i {
+            font-size: 1.8rem;
+            color: var(--govt-blue);
+        }
+
+        .govt-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--govt-blue);
+        }
+
+        .govt-card p {
+            color: var(--govt-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Quiz Maker */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--govt-light-gray);
+        }
+
+        .section-header h2 {
+            color: var(--govt-blue);
+            font-size: 1.5rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0f9ff;
+            border-radius: var(--radius);
+            border: 1px solid #bae6fd;
+        }
+
+        .filter-select {
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--govt-light-gray);
+            background-color: var(--govt-white);
+            font-size: 0.95rem;
+            min-width: 150px;
+        }
+
+        .question-form {
+            background-color: var(--govt-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--govt-light-gray);
+        }
+
+        .question-form h3 {
+            margin-bottom: 1.5rem;
+            color: var(--govt-blue);
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--govt-light-gray);
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--govt-light-gray);
+            background-color: #f8fafc;
+        }
+
+        .option-item input[type="radio"] {
+            accent-color: var(--govt-blue);
+            transform: scale(1.2);
+        }
+
+        .option-item label {
+            font-weight: 600;
+            margin-right: auto;
+            color: var(--govt-dark-gray);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--govt-light-gray);
+        }
+
+        /* Symbol Helper */
+        .symbol-helper {
+            background-color: var(--govt-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--govt-light-gray);
+        }
+
+        .symbol-helper h4 {
+            margin-bottom: 1rem;
+            color: var(--govt-blue);
+        }
+
+        .symbol-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .symbol-btn {
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--govt-light-gray);
+            background-color: #f3f4f6;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .symbol-btn:hover {
+            background-color: var(--govt-blue);
+            color: white;
+            border-color: var(--govt-blue);
+        }
+
+        /* Questions List */
+        .questions-list {
+            background-color: var(--govt-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 1px solid var(--govt-light-gray);
+        }
+
+        .questions-list h3 {
+            margin-bottom: 1.5rem;
+            color: var(--govt-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .question-item {
+            padding: 1.5rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--govt-light-gray);
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
+            background-color: #fefce8;
+        }
+
+        .question-item:hover {
+            border-color: var(--govt-blue);
+            background-color: #f0f9ff;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .question-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--govt-gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .question-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-option {
+            padding: 0.8rem;
+            border-radius: 6px;
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+        }
+
+        .question-option.correct {
+            background-color: rgba(21, 128, 61, 0.1);
+            border: 1px solid var(--govt-green);
+        }
+
+        .question-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* Quiz Player */
+        .quiz-player-container {
+            background-color: var(--govt-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--govt-light-gray);
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--govt-light-gray);
+        }
+
+        .quiz-progress {
+            margin-bottom: 2rem;
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-radius: var(--radius);
+        }
+
+        .progress-bar {
+            height: 12px;
+            background-color: var(--govt-light-gray);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+            border: 1px solid #d1d5db;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--govt-blue), var(--govt-light-blue));
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-question {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: #fefce8;
+            border-radius: var(--radius);
+            border: 1px solid #fde68a;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-option {
+            padding: 1.2rem;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--govt-light-gray);
+            background-color: var(--govt-white);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--govt-blue);
+            background-color: rgba(30, 64, 175, 0.05);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--govt-blue);
+            background-color: rgba(30, 64, 175, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--govt-green);
+            background-color: rgba(21, 128, 61, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--govt-red);
+            background-color: rgba(185, 28, 28, 0.1);
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--govt-light-gray);
+        }
+
+        /* Results Screen */
+        .results-container {
+            background-color: var(--govt-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 3rem;
+            text-align: center;
+            max-width: 600px;
+            margin: 2rem auto;
+            border: 1px solid var(--govt-light-gray);
+        }
+
+        .results-score {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--govt-blue);
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background-color: #fefce8;
+            border-radius: var(--radius);
+            border: 3px solid var(--govt-yellow);
+        }
+
+        .results-message {
+            font-size: 1.3rem;
+            color: var(--govt-dark-gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .results-details {
+            text-align: left;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--govt-light-gray);
+            background-color: #f9fafb;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+        }
+
+        /* Export/Import */
+        .data-actions {
+            background-color: var(--govt-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--govt-light-gray);
+        }
+
+        .data-actions h3 {
+            margin-bottom: 1.5rem;
+            color: var(--govt-blue);
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--govt-light-gray);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        .govt-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-top: 1px solid var(--govt-light-gray);
+            color: var(--govt-gray);
+            font-size: 0.9rem;
+            background-color: var(--govt-beige);
+        }
+
+        /* Badge for chapters */
+        .chapter-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: #dbeafe;
+            color: var(--govt-blue);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .govt-header {
+                padding: 1rem;
+            }
+            
+            .logo-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .govt-nav {
+                flex-direction: column;
+            }
+            
+            .govt-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .form-col {
+                width: 100%;
+            }
+            
+            .quiz-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .quiz-navigation .govt-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 1.5rem;
+                margin: 1.5rem;
+            }
+            
+            .govt-card {
+                padding: 1rem;
+            }
+            
+            .question-form {
+                padding: 1.5rem;
+            }
+            
+            .results-container {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Government Stamp */
+        .govt-stamp {
+            position: relative;
+            display: inline-block;
+            padding: 5px 15px;
+            background: linear-gradient(135deg, var(--govt-blue) 0%, var(--govt-dark-blue) 100%);
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-left: 10px;
+        }
+
+        .govt-stamp::after {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px dashed var(--govt-yellow);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        /* Chapter Section */
+        .chapter-section {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f0f9ff;
+            border-radius: var(--radius);
+            border: 1px solid #bae6fd;
+        }
+    </style>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="login-screen" class="login-container">
+            <h2><i class="fas fa-user-graduate"></i> Government School Quiz System</h2>
+            <div class="form-group">
+                <label for="user-name" class="form-label">Your Name / Teacher ID</label>
+                <input type="text" id="user-name" class="form-control" placeholder="Enter your name or teacher ID">
+            </div>
+            <div class="form-group">
+                <label for="user-role" class="form-label">Select Role</label>
+                <select id="user-role" class="form-control">
+                    <option value="teacher">Teacher / Quiz Maker</option>
+                    <option value="student">Student / Quiz Player</option>
+                </select>
+            </div>
+            <button id="login-btn" class="govt-btn govt-btn-primary" style="width: 100%;">
+                <i class="fas fa-sign-in-alt"></i> Login / Continue
+            </button>
+            <p style="text-align: center; margin-top: 1rem; color: var(--govt-gray); font-size: 0.9rem;">
+                <i class="fas fa-info-circle"></i> Official Government School System - All data stored locally
+            </p>
+        </div>
+
+        <!-- Main Application (Hidden Initially) -->
+        <div id="app-container" style="display: none;">
+            <!-- Government Header -->
+            <header class="govt-header">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Government School Quiz System <span class="govt-stamp">OFFICIAL</span></h1>
+                        <h2>Offline Quiz Maker & Player Application</h2>
+                    </div>
+                </div>
+                <div class="govt-tagline">
+                    <i class="fas fa-chalkboard-teacher"></i> Empowering Teachers & Students | 100% Offline | No Internet Required
+                </div>
+            </header>
+
+            <!-- Navigation -->
+            <nav class="govt-nav">
+                <button id="nav-dashboard" class="govt-btn govt-btn-outline active-nav">
+                    <i class="fas fa-home"></i> Dashboard
+                </button>
+                <button id="nav-quiz-maker" class="govt-btn govt-btn-outline">
+                    <i class="fas fa-edit"></i> Quiz Maker
+                </button>
+                <button id="nav-quiz-player" class="govt-btn govt-btn-outline">
+                    <i class="fas fa-play-circle"></i> Quiz Player
+                </button>
+                <button id="nav-data" class="govt-btn govt-btn-outline">
+                    <i class="fas fa-database"></i> Data Manager
+                </button>
+                <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+                    <span id="user-greeting" style="color: var(--govt-blue); font-weight: 600;"></span>
+                    <button id="logout-btn" class="govt-btn govt-btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main>
+                <!-- Dashboard -->
+                <section id="dashboard-content" class="main-content active-content">
+                    <div class="dashboard">
+                        <div class="govt-card">
+                            <div class="card-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <h3>Quiz Maker</h3>
+                            <p>Create and edit quizzes with chapters, math symbols and Odia language support for Class 9 and 10 students.</p>
+                            <button id="goto-quiz-maker" class="govt-btn govt-btn-primary">Open Quiz Maker</button>
+                        </div>
+                        <div class="govt-card">
+                            <div class="card-icon">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                            <h3>Quiz Player</h3>
+                            <p>Take quizzes filtered by class, subject and chapter. Test knowledge with timer and score tracking.</p>
+                            <button id="goto-quiz-player" class="govt-btn govt-btn-primary">Start Quiz</button>
+                        </div>
+                        <div class="govt-card">
+                            <div class="card-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h3>Data Manager</h3>
+                            <p>Export and import quiz data as CSV files for backup and sharing between teachers.</p>
+                            <button id="goto-data" class="govt-btn govt-btn-primary">Manage Data</button>
+                        </div>
+                        <div class="govt-card">
+                            <div class="card-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h3>Statistics</h3>
+                            <p>View quiz statistics and performance reports for assessment and improvement tracking.</p>
+                            <button id="view-stats" class="govt-btn govt-btn-secondary">View Stats</button>
+                        </div>
+                    </div>
+                    <div class="govt-card">
+                        <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                        <p id="recent-activity">No recent activity yet. Start by creating your first quiz!</p>
+                    </div>
+                </section>
+
+                <!-- Quiz Maker -->
+                <section id="quiz-maker-content" class="main-content">
+                    <div class="section-header">
+                        <h2><i class="fas fa-edit"></i> Quiz Maker (Teacher Mode)</h2>
+                        <div>
+                            <button id="clear-form" class="govt-btn govt-btn-secondary">
+                                <i class="fas fa-times"></i> Clear Form
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Symbol Helper -->
+                    <div class="symbol-helper">
+                        <h4><i class="fas fa-icons"></i> Insert Symbols & Odia Characters</h4>
+                        <div class="symbol-buttons" id="math-symbols">
+                            <button class="symbol-btn" data-symbol="²">x² (Square)</button>
+                            <button class="symbol-btn" data-symbol="√">√ (Square Root)</button>
+                            <button class="symbol-btn" data-symbol="π">π (Pi)</button>
+                            <button class="symbol-btn" data-symbol="÷">÷ (Division)</button>
+                            <button class="symbol-btn" data-symbol="×">× (Multiplication)</button>
+                            <button class="symbol-btn" data-symbol="∠">∠ (Angle)</button>
+                            <button class="symbol-btn" data-symbol="°">° (Degree)</button>
+                            <button class="symbol-btn" data-symbol="≤">≤ (Less or Equal)</button>
+                            <button class="symbol-btn" data-symbol="≥">≥ (Greater or Equal)</button>
+                        </div>
+                        <div class="symbol-buttons" id="odia-symbols">
+                            <button class="symbol-btn" data-symbol="ଅ">ଅ</button>
+                            <button class="symbol-btn" data-symbol="ଆ">ଆ</button>
+                            <button class="symbol-btn" data-symbol="ଇ">ଇ</button>
+                            <button class="symbol-btn" data-symbol="ଈ">ଈ</button>
+                            <button class="symbol-btn" data-symbol="ଉ">ଉ</button>
+                            <button class="symbol-btn" data-symbol="ଊ">ଊ</button>
+                            <button class="symbol-btn" data-symbol="ସମାଧାନ">ସମାଧାନ (Solution)</button>
+                            <button class="symbol-btn" data-symbol="ପ୍ରଶ୍ନ">ପ୍ରଶ୍ନ (Question)</button>
+                            <button class="symbol-btn" data-symbol="ଉତ୍ତର">ଉତ୍ତର (Answer)</button>
+                        </div>
+                    </div>
+
+                    <!-- Question Form -->
+                    <div class="question-form">
+                        <h3><i class="fas fa-plus-circle"></i> Add/Edit Question</h3>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label class="form-label">Class</label>
+                                <select id="question-class" class="form-control">
+                                    <option value="9">Class 9</option>
+                                    <option value="10">Class 10</option>
+                                    <option value="custom">Other Class</option>
+                                </select>
+                            </div>
+                            <div class="form-col">
+                                <label class="form-label">Subject</label>
+                                <select id="question-subject" class="form-control">
+                                    <option value="Math">Mathematics</option>
+                                    <option value="Science">Science</option>
+                                    <option value="Odia">Odia</option>
+                                    <option value="English">English</option>
+                                    <option value="SST">Social Studies</option>
+                                    <option value="custom">Custom Subject</option>
+                                </select>
+                            </div>
+                            <div class="form-col">
+                                <label class="form-label">Chapter</label>
+                                <input type="text" id="question-chapter" class="form-control" placeholder="E.g.: Algebra, Geometry, Force, etc.">
+                            </div>
+                        </div>
+                        
+                        <div class="form-col" id="custom-subject-container" style="display: none; margin-top: 1rem;">
+                            <label class="form-label">Custom Subject Name</label>
+                            <input type="text" id="custom-subject" class="form-control" placeholder="Enter subject name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Question Text</label>
+                            <textarea id="question-text" class="form-control" rows="3" placeholder="Enter your question here..."></textarea>
+                        </div>
+                        
+                        <h4 style="margin: 1.5rem 0 1rem 0;">Options</h4>
+                        <div class="options-container">
+                            <div class="option-item">
+                                <input type="radio" id="correct-a" name="correct-answer" value="A">
+                                <label for="option-a">A.</label>
+                                <input type="text" id="option-a" class="form-control" placeholder="Option A">
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="correct-b" name="correct-answer" value="B">
+                                <label for="option-b">B.</label>
+                                <input type="text" id="option-b" class="form-control" placeholder="Option B">
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="correct-c" name="correct-answer" value="C">
+                                <label for="option-c">C.</label>
+                                <input type="text" id="option-c" class="form-control" placeholder="Option C">
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="correct-d" name="correct-answer" value="D">
+                                <label for="option-d">D.</label>
+                                <input type="text" id="option-d" class="form-control" placeholder="Option D">
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button id="save-question" class="govt-btn govt-btn-success">
+                                <i class="fas fa-save"></i> Save Question
+                            </button>
+                            <button id="update-question" class="govt-btn govt-btn-warning" style="display: none;">
+                                <i class="fas fa-edit"></i> Update Question
+                            </button>
+                            <button id="cancel-edit" class="govt-btn govt-btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Questions List -->
+                    <div class="questions-list">
+                        <h3>
+                            <span><i class="fas fa-list"></i> Saved Questions</span>
+                            <div class="filters">
+                                <select id="filter-class" class="filter-select">
+                                    <option value="all">All Classes</option>
+                                    <option value="9">Class 9</option>
+                                    <option value="10">Class 10</option>
+                                    <option value="custom">Other Class</option>
+                                </select>
+                                <select id="filter-subject" class="filter-select">
+                                    <option value="all">All Subjects</option>
+                                    <option value="Math">Math</option>
+                                    <option value="Science">Science</option>
+                                    <option value="Odia">Odia</option>
+                                    <option value="English">English</option>
+                                    <option value="SST">Social Studies</option>
+                                </select>
+                                <input type="text" id="filter-chapter" class="filter-select" placeholder="Filter by chapter...">
+                            </div>
+                        </h3>
+                        <div id="questions-container">
+                            <!-- Questions will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz Player -->
+                <section id="quiz-player-content" class="main-content">
+                    <div class="section-header">
+                        <h2><i class="fas fa-play-circle"></i> Quiz Player (Student Mode)</h2>
+                        <div>
+                            <button id="start-quiz" class="govt-btn govt-btn-success">
+                                <i class="fas fa-play"></i> Start Quiz
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Setup -->
+                    <div id="quiz-setup" class="govt-card">
+                        <h3><i class="fas fa-cog"></i> Quiz Setup</h3>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label class="form-label">Select Class</label>
+                                <select id="player-class" class="form-control">
+                                    <option value="all">All Classes</option>
+                                    <option value="9">Class 9</option>
+                                    <option value="10">Class 10</option>
+                                </select>
+                            </div>
+                            <div class="form-col">
+                                <label class="form-label">Select Subject</label>
+                                <select id="player-subject" class="form-control">
+                                    <option value="all">All Subjects</option>
+                                    <option value="Math">Mathematics</option>
+                                    <option value="Science">Science</option>
+                                    <option value="Odia">Odia</option>
+                                    <option value="English">English</option>
+                                    <option value="SST">Social Studies</option>
+                                </select>
+                            </div>
+                            <div class="form-col">
+                                <label class="form-label">Number of Questions</label>
+                                <select id="quiz-length" class="form-control">
+                                    <option value="5">5 Questions</option>
+                                    <option value="10">10 Questions</option>
+                                    <option value="15">15 Questions</option>
+                                    <option value="20">20 Questions</option>
+                                    <option value="all">All Available</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chapter-section">
+                            <label class="form-label">Chapter (Optional)</label>
+                            <input type="text" id="player-chapter" class="form-control" placeholder="Enter specific chapter or leave blank for all">
+                            <p style="font-size: 0.9rem; color: var(--govt-gray); margin-top: 0.5rem;">
+                                <i class="fas fa-info-circle"></i> Enter a chapter name to practice specific topics
+                            </p>
+                        </div>
+                        <div id="available-questions-info" style="margin-top: 1rem; padding: 1rem; background-color: #f0f9ff; border-radius: var(--radius); border: 1px solid #bae6fd;">
+                            <i class="fas fa-info-circle"></i> <span id="questions-count">0</span> questions available with current filters.
+                        </div>
+                    </div>
+
+                    <!-- Quiz Interface -->
+                    <div id="quiz-interface" style="display: none;">
+                        <div class="quiz-player-container">
+                            <div class="quiz-info">
+                                <div>
+                                    <h3 id="quiz-title">Mathematics Quiz</h3>
+                                    <p id="quiz-subtitle">Class 10 | 10 Questions</p>
+                                </div>
+                                <div id="quiz-timer" style="font-size: 1.5rem; font-weight: bold; color: var(--govt-blue);">
+                                    <i class="fas fa-clock"></i> <span id="time">00:00</span>
+                                </div>
+                            </div>
+                            
+                            <div class="quiz-progress">
+                                <div class="progress-bar">
+                                    <div id="progress-fill" class="progress-fill" style="width: 0%;"></div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Question <span id="current-q">1</span> of <span id="total-q">10</span></span>
+                                    <span>Score: <span id="current-score">0</span></span>
+                                </div>
+                            </div>
+                            
+                            <div class="quiz-question">
+                                <h3 id="question-display">Question will appear here</h3>
+                                <div id="question-chapter-display" style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--govt-gray);">
+                                    <i class="fas fa-bookmark"></i> Chapter: <span id="chapter-name">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="quiz-options" id="options-container">
+                                <!-- Options will be loaded here -->
+                            </div>
+                            
+                            <div class="quiz-navigation">
+                                <button id="prev-question" class="govt-btn govt-btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Previous
+                                </button>
+                                <button id="next-question" class="govt-btn govt-btn-primary">
+                                    Next <i class="fas fa-arrow-right"></i>
+                                </button>
+                                <button id="submit-quiz" class="govt-btn govt-btn-success" style="display: none;">
+                                    <i class="fas fa-check-circle"></i> Submit Quiz
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Screen -->
+                    <div id="results-screen" class="results-container" style="display: none;">
+                        <h2><i class="fas fa-trophy"></i> Quiz Completed!</h2>
+                        <div class="results-score">
+                            <span id="final-score">0</span>/<span id="max-score">10</span>
+                        </div>
+                        <div class="results-message" id="results-message">
+                            Great job! You passed the quiz.
+                        </div>
+                        <div class="results-details">
+                            <h4><i class="fas fa-clipboard-list"></i> Quiz Summary</h4>
+                            <p><strong>Class:</strong> <span id="result-class">10</span></p>
+                            <p><strong>Subject:</strong> <span id="result-subject">Mathematics</span></p>
+                            <p><strong>Chapter:</strong> <span id="result-chapter">All Chapters</span></p>
+                            <p><strong>Questions Attempted:</strong> <span id="result-attempted">10</span></p>
+                            <p><strong>Correct Answers:</strong> <span id="result-correct">8</span></p>
+                            <p><strong>Percentage:</strong> <span id="result-percentage">80%</span></p>
+                            <p><strong>Time Taken:</strong> <span id="result-time">05:30</span></p>
+                        </div>
+                        <div style="margin-top: 2rem;">
+                            <button id="restart-quiz" class="govt-btn govt-btn-primary">
+                                <i class="fas fa-redo"></i> Take Another Quiz
+                            </button>
+                            <button id="review-quiz" class="govt-btn govt-btn-secondary">
+                                <i class="fas fa-eye"></i> Review Answers
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Data Manager -->
+                <section id="data-content" class="main-content">
+                    <div class="section-header">
+                        <h2><i class="fas fa-database"></i> Data Manager</h2>
+                    </div>
+                    
+                    <div class="data-actions">
+                        <h3><i class="fas fa-file-export"></i> Export Data</h3>
+                        <p>Export all quiz questions to a CSV file that can be opened in Excel or edited in a text editor.</p>
+                        <div class="action-buttons">
+                            <button id="export-csv" class="govt-btn govt-btn-success">
+                                <i class="fas fa-file-csv"></i> Export to CSV
+                            </button>
+                            <button id="export-json" class="govt-btn govt-btn-secondary">
+                                <i class="fas fa-file-code"></i> Export to JSON
+                            </button>
+                            <button id="print-questions" class="govt-btn govt-btn-warning">
+                                <i class="fas fa-print"></i> Print Questions
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="data-actions">
+                        <h3><i class="fas fa-file-import"></i> Import Data</h3>
+                        <p>Import questions from a CSV file. Make sure it follows the correct format (Class, Subject, Chapter, Question, A, B, C, D, Correct).</p>
+                        <div class="action-buttons">
+                            <input type="file" id="import-file" accept=".csv,.txt" style="display: none;">
+                            <button id="import-csv" class="govt-btn govt-btn-warning">
+                                <i class="fas fa-file-import"></i> Import from CSV
+                            </button>
+                            <button id="clear-all-data" class="govt-btn govt-btn-danger">
+                                <i class="fas fa-trash-alt"></i> Clear All Data
+                            </button>
+                        </div>
+                        <div id="import-status" style="margin-top: 1rem; padding: 1rem; border-radius: var(--radius); display: none;"></div>
+                    </div>
+                    
+                    <div class="data-actions">
+                        <h3><i class="fas fa-chart-pie"></i> Data Statistics</h3>
+                        <div id="data-stats">
+                            <p><strong>Total Questions:</strong> <span id="stat-total">0</span></p>
+                            <p><strong>By Class:</strong> Class 9: <span id="stat-class9">0</span>, Class 10: <span id="stat-class10">0</span>, Other: <span id="stat-class-custom">0</span></p>
+                            <p><strong>By Subject:</strong> Math: <span id="stat-math">0</span>, Science: <span id="stat-science">0</span>, Odia: <span id="stat-odia">0</span>, English: <span id="stat-english">0</span>, SST: <span id="stat-sst">0</span>, Other: <span id="stat-subject-custom">0</span></p>
+                            <p><strong>Total Chapters:</strong> <span id="stat-chapters">0</span> unique chapters</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            
+            <!-- Footer -->
+            <footer class="govt-footer">
+                <p><i class="fas fa-school"></i> Government School Quiz System | Offline Quiz Maker & Player</p>
+                <p>Designed for Odisha Government Schools & Smart Boards | All data is stored locally on your device</p>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem;">© 2023 Government School Education Department</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        const state = {
+            currentUser: null,
+            currentRole: null,
+            questions: [],
+            editingQuestionId: null,
+            currentQuiz: [],
+            currentQuestionIndex: 0,
+            userAnswers: [],
+            quizStartTime: null,
+            quizTimer: null
+        };
+
+        // Default Chapters for Subjects
+        const defaultChapters = {
+            'Math': ['Algebra', 'Geometry', 'Arithmetic', 'Trigonometry', 'Statistics', 'Mensuration'],
+            'Science': ['Physics', 'Chemistry', 'Biology', 'Environmental Science', 'Force and Motion', 'Light'],
+            'Odia': ['Poetry', 'Grammar', 'Comprehension', 'Writing Skills', 'Literature'],
+            'English': ['Grammar', 'Comprehension', 'Writing Skills', 'Literature', 'Vocabulary'],
+            'SST': ['History', 'Geography', 'Civics', 'Economics']
+        };
+
+        // DOM Elements
+        const loginScreen = document.getElementById('login-screen');
+        const appContainer = document.getElementById('app-container');
+        const userNameInput = document.getElementById('user-name');
+        const userRoleSelect = document.getElementById('user-role');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userGreeting = document.getElementById('user-greeting');
+        const recentActivity = document.getElementById('recent-activity');
+        
+        // Navigation
+        const navDashboard = document.getElementById('nav-dashboard');
+        const navQuizMaker = document.getElementById('nav-quiz-maker');
+        const navQuizPlayer = document.getElementById('nav-quiz-player');
+        const navData = document.getElementById('nav-data');
+        
+        // Content sections
+        const dashboardContent = document.getElementById('dashboard-content');
+        const quizMakerContent = document.getElementById('quiz-maker-content');
+        const quizPlayerContent = document.getElementById('quiz-player-content');
+        const dataContent = document.getElementById('data-content');
+        
+        // Quiz Maker Elements
+        const questionClass = document.getElementById('question-class');
+        const questionSubject = document.getElementById('question-subject');
+        const questionChapter = document.getElementById('question-chapter');
+        const customSubjectContainer = document.getElementById('custom-subject-container');
+        const customSubject = document.getElementById('custom-subject');
+        const questionText = document.getElementById('question-text');
+        const optionA = document.getElementById('option-a');
+        const optionB = document.getElementById('option-b');
+        const optionC = document.getElementById('option-c');
+        const optionD = document.getElementById('option-d');
+        const saveQuestionBtn = document.getElementById('save-question');
+        const updateQuestionBtn = document.getElementById('update-question');
+        const cancelEditBtn = document.getElementById('cancel-edit');
+        const clearFormBtn = document.getElementById('clear-form');
+        const filterClass = document.getElementById('filter-class');
+        const filterSubject = document.getElementById('filter-subject');
+        const filterChapter = document.getElementById('filter-chapter');
+        const questionsContainer = document.getElementById('questions-container');
+        const gotoQuizMaker = document.getElementById('goto-quiz-maker');
+        const gotoQuizPlayer = document.getElementById('goto-quiz-player');
+        const gotoData = document.getElementById('goto-data');
+        
+        // Quiz Player Elements
+        const playerClass = document.getElementById('player-class');
+        const playerSubject = document.getElementById('player-subject');
+        const playerChapter = document.getElementById('player-chapter');
+        const quizLength = document.getElementById('quiz-length');
+        const startQuizBtn = document.getElementById('start-quiz');
+        const quizSetup = document.getElementById('quiz-setup');
+        const quizInterface = document.getElementById('quiz-interface');
+        const resultsScreen = document.getElementById('results-screen');
+        const quizTitle = document.getElementById('quiz-title');
+        const quizSubtitle = document.getElementById('quiz-subtitle');
+        const currentQ = document.getElementById('current-q');
+        const totalQ = document.getElementById('total-q');
+        const currentScore = document.getElementById('current-score');
+        const questionDisplay = document.getElementById('question-display');
+        const chapterNameDisplay = document.getElementById('chapter-name');
+        const optionsContainer = document.getElementById('options-container');
+        const prevQuestionBtn = document.getElementById('prev-question');
+        const nextQuestionBtn = document.getElementById('next-question');
+        const submitQuizBtn = document.getElementById('submit-quiz');
+        const progressFill = document.getElementById('progress-fill');
+        const restartQuizBtn = document.getElementById('restart-quiz');
+        const reviewQuizBtn = document.getElementById('review-quiz');
+        const finalScore = document.getElementById('final-score');
+        const maxScore = document.getElementById('max-score');
+        const resultsMessage = document.getElementById('results-message');
+        const resultClass = document.getElementById('result-class');
+        const resultSubject = document.getElementById('result-subject');
+        const resultChapter = document.getElementById('result-chapter');
+        const resultAttempted = document.getElementById('result-attempted');
+        const resultCorrect = document.getElementById('result-correct');
+        const resultPercentage = document.getElementById('result-percentage');
+        const resultTime = document.getElementById('result-time');
+        const questionsCount = document.getElementById('questions-count');
+        const timeDisplay = document.getElementById('time');
+        
+        // Data Manager Elements
+        const exportCsvBtn = document.getElementById('export-csv');
+        const exportJsonBtn = document.getElementById('export-json');
+        const printQuestionsBtn = document.getElementById('print-questions');
+        const importCsvBtn = document.getElementById('import-csv');
+        const importFile = document.getElementById('import-file');
+        const clearAllDataBtn = document.getElementById('clear-all-data');
+        const importStatus = document.getElementById('import-status');
+        const statTotal = document.getElementById('stat-total');
+        const statClass9 = document.getElementById('stat-class9');
+        const statClass10 = document.getElementById('stat-class10');
+        const statClassCustom = document.getElementById('stat-class-custom');
+        const statMath = document.getElementById('stat-math');
+        const statScience = document.getElementById('stat-science');
+        const statOdia = document.getElementById('stat-odia');
+        const statEnglish = document.getElementById('stat-english');
+        const statSst = document.getElementById('stat-sst');
+        const statSubjectCustom = document.getElementById('stat-subject-custom');
+        const statChapters = document.getElementById('stat-chapters');
+        
+        // Symbol Helpers
+        const mathSymbols = document.getElementById('math-symbols');
+        const odiaSymbols = document.getElementById('odia-symbols');
+        
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('eduquiz_user');
+            const savedRole = localStorage.getItem('eduquiz_role');
+            
+            if (savedUser && savedRole) {
+                state.currentUser = savedUser;
+                state.currentRole = savedRole;
+                showApp();
+            }
+            
+            // Load questions from localStorage
+            loadQuestions();
+            
+            // Update stats
+            updateStats();
+            
+            // Update available questions count
+            updateAvailableQuestionsCount();
+            
+            // Event Listeners
+            setupEventListeners();
+            
+            // Show login screen if not logged in
+            if (!state.currentUser) {
+                loginScreen.style.display = 'block';
+                appContainer.style.display = 'none';
+            }
+            
+            // Initialize chapter suggestions
+            initializeChapterSuggestions();
+        });
+        
+        function setupEventListeners() {
+            // Login
+            loginBtn.addEventListener('click', handleLogin);
+            logoutBtn.addEventListener('click', handleLogout);
+            
+            // Navigation
+            navDashboard.addEventListener('click', () => showSection('dashboard'));
+            navQuizMaker.addEventListener('click', () => showSection('quiz-maker'));
+            navQuizPlayer.addEventListener('click', () => showSection('quiz-player'));
+            navData.addEventListener('click', () => showSection('data'));
+            
+            // Dashboard buttons
+            gotoQuizMaker.addEventListener('click', () => showSection('quiz-maker'));
+            gotoQuizPlayer.addEventListener('click', () => showSection('quiz-player'));
+            gotoData.addEventListener('click', () => showSection('data'));
+            document.getElementById('view-stats').addEventListener('click', () => showSection('data'));
+            
+            // Quiz Maker
+            questionSubject.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customSubjectContainer.style.display = 'block';
+                } else {
+                    customSubjectContainer.style.display = 'none';
+                    // Update chapter suggestions based on subject
+                    updateChapterSuggestions(this.value);
+                }
+            });
+            
+            saveQuestionBtn.addEventListener('click', saveQuestion);
+            updateQuestionBtn.addEventListener('click', updateQuestion);
+            cancelEditBtn.addEventListener('click', cancelEdit);
+            clearFormBtn.addEventListener('click', clearQuestionForm);
+            
+            filterClass.addEventListener('change', filterQuestions);
+            filterSubject.addEventListener('change', filterQuestions);
+            filterChapter.addEventListener('input', filterQuestions);
+            
+            // Symbol helpers
+            mathSymbols.addEventListener('click', function(e) {
+                if (e.target.classList.contains('symbol-btn')) {
+                    insertSymbol(e.target.getAttribute('data-symbol'));
+                }
+            });
+            
+            odiaSymbols.addEventListener('click', function(e) {
+                if (e.target.classList.contains('symbol-btn')) {
+                    insertSymbol(e.target.getAttribute('data-symbol'));
+                }
+            });
+            
+            // Quiz Player
+            playerClass.addEventListener('change', updateAvailableQuestionsCount);
+            playerSubject.addEventListener('change', updateAvailableQuestionsCount);
+            playerChapter.addEventListener('input', updateAvailableQuestionsCount);
+            quizLength.addEventListener('change', updateAvailableQuestionsCount);
+            
+            startQuizBtn.addEventListener('click', startQuiz);
+            prevQuestionBtn.addEventListener('click', showPreviousQuestion);
+            nextQuestionBtn.addEventListener('click', showNextQuestion);
+            submitQuizBtn.addEventListener('click', submitQuiz);
+            restartQuizBtn.addEventListener('click', restartQuiz);
+            reviewQuizBtn.addEventListener('click', reviewQuiz);
+            
+            // Data Manager
+            exportCsvBtn.addEventListener('click', exportToCsv);
+            exportJsonBtn.addEventListener('click', exportToJson);
+            printQuestionsBtn.addEventListener('click', printQuestions);
+            importCsvBtn.addEventListener('click', () => importFile.click());
+            importFile.addEventListener('change', handleFileImport);
+            clearAllDataBtn.addEventListener('click', clearAllData);
+        }
+        
+        function handleLogin() {
+            const userName = userNameInput.value.trim();
+            const userRole = userRoleSelect.value;
+            
+            if (!userName) {
+                alert('Please enter your name or teacher ID');
+                return;
+            }
+            
+            state.currentUser = userName;
+            state.currentRole = userRole;
+            
+            // Save to localStorage
+            localStorage.setItem('eduquiz_user', userName);
+            localStorage.setItem('eduquiz_role', userRole);
+            
+            // Record login activity
+            recordActivity(`Logged in as ${userRole === 'teacher' ? 'Teacher' : 'Student'}`);
+            
+            showApp();
+        }
+        
+        function handleLogout() {
+            state.currentUser = null;
+            state.currentRole = null;
+            
+            localStorage.removeItem('eduquiz_user');
+            localStorage.removeItem('eduquiz_role');
+            
+            loginScreen.style.display = 'block';
+            appContainer.style.display = 'none';
+            
+            // Reset form
+            userNameInput.value = '';
+            userRoleSelect.value = 'teacher';
+        }
+        
+        function showApp() {
+            loginScreen.style.display = 'none';
+            appContainer.style.display = 'block';
+            
+            // Update greeting
+            userGreeting.textContent = `${state.currentUser} (${state.currentRole === 'teacher' ? 'Teacher' : 'Student'})`;
+            
+            // Show dashboard by default
+            showSection('dashboard');
+            
+            // Update recent activity
+            updateRecentActivity();
+        }
+        
+        function showSection(section) {
+            // Hide all content sections
+            dashboardContent.classList.remove('active-content');
+            quizMakerContent.classList.remove('active-content');
+            quizPlayerContent.classList.remove('active-content');
+            dataContent.classList.remove('active-content');
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.govt-btn-outline').forEach(btn => {
+                btn.classList.remove('active-nav');
+            });
+            
+            // Show selected section and activate nav button
+            switch(section) {
+                case 'dashboard':
+                    dashboardContent.classList.add('active-content');
+                    navDashboard.classList.add('active-nav');
+                    break;
+                case 'quiz-maker':
+                    quizMakerContent.classList.add('active-content');
+                    navQuizMaker.classList.add('active-nav');
+                    loadQuestions();
+                    filterQuestions();
+                    break;
+                case 'quiz-player':
+                    quizPlayerContent.classList.add('active-content');
+                    navQuizPlayer.classList.add('active-nav');
+                    updateAvailableQuestionsCount();
+                    break;
+                case 'data':
+                    dataContent.classList.add('active-content');
+                    navData.classList.add('active-nav');
+                    updateStats();
+                    break;
+            }
+        }
+        
+        // Chapter Suggestions
+        function initializeChapterSuggestions() {
+            // Create datalist for chapter suggestions
+            const chapterDatalist = document.createElement('datalist');
+            chapterDatalist.id = 'chapter-suggestions';
+            document.body.appendChild(chapterDatalist);
+            
+            // Connect chapter input to datalist
+            questionChapter.setAttribute('list', 'chapter-suggestions');
+            playerChapter.setAttribute('list', 'chapter-suggestions');
+            
+            // Initialize with default chapters
+            updateChapterSuggestions('Math');
+        }
+        
+        function updateChapterSuggestions(subject) {
+            const datalist = document.getElementById('chapter-suggestions');
+            datalist.innerHTML = '';
+            
+            if (defaultChapters[subject]) {
+                defaultChapters[subject].forEach(chapter => {
+                    const option = document.createElement('option');
+                    option.value = chapter;
+                    datalist.appendChild(option);
+                });
+            }
+            
+            // Also add chapters from existing questions
+            const existingChapters = [...new Set(state.questions
+                .filter(q => q.subject === subject)
+                .map(q => q.chapter)
+                .filter(Boolean))];
+                
+            existingChapters.forEach(chapter => {
+                if (!defaultChapters[subject] || !defaultChapters[subject].includes(chapter)) {
+                    const option = document.createElement('option');
+                    option.value = chapter;
+                    datalist.appendChild(option);
+                }
+            });
+        }
+        
+        // Question Management
+        function loadQuestions() {
+            const savedQuestions = localStorage.getItem('eduquiz_questions');
+            state.questions = savedQuestions ? JSON.parse(savedQuestions) : [];
+        }
+        
+        function saveQuestions() {
+            localStorage.setItem('eduquiz_questions', JSON.stringify(state.questions));
+            updateStats();
+            updateAvailableQuestionsCount();
+        }
+        
+        function saveQuestion() {
+            // Validate form
+            if (!validateQuestionForm()) {
+                return;
+            }
+            
+            const classValue = questionClass.value;
+            const subjectValue = questionSubject.value === 'custom' ? customSubject.value : questionSubject.value;
+            const chapterValue = questionChapter.value.trim();
+            const questionValue = questionText.value.trim();
+            const options = [
+                optionA.value.trim(),
+                optionB.value.trim(),
+                optionC.value.trim(),
+                optionD.value.trim()
+            ];
+            
+            // Find correct answer
+            let correctAnswer = '';
+            const correctRadios = document.getElementsByName('correct-answer');
+            for (const radio of correctRadios) {
+                if (radio.checked) {
+                    correctAnswer = radio.value;
+                    break;
+                }
+            }
+            
+            if (!correctAnswer) {
+                alert('Please select the correct answer');
+                return;
+            }
+            
+            const newQuestion = {
+                id: Date.now(),
+                class: classValue,
+                subject: subjectValue,
+                chapter: chapterValue || 'General',
+                question: questionValue,
+                options: options,
+                correctAnswer: correctAnswer,
+                createdAt: new Date().toISOString()
+            };
+            
+            state.questions.push(newQuestion);
+            saveQuestions();
+            
+            // Clear form and refresh list
+            clearQuestionForm();
+            filterQuestions();
+            
+            // Record activity
+            recordActivity(`Added new question: ${subjectValue} - Class ${classValue}`);
+            
+            alert('Question saved successfully!');
+        }
+        
+        function editQuestion(id) {
+            const question = state.questions.find(q => q.id === id);
+            if (!question) return;
+            
+            state.editingQuestionId = id;
+            
+            // Populate form
+            questionClass.value = question.class;
+            questionSubject.value = question.subject;
+            questionChapter.value = question.chapter;
+            questionText.value = question.question;
+            optionA.value = question.options[0];
+            optionB.value = question.options[1];
+            optionC.value = question.options[2];
+            optionD.value = question.options[3];
+            
+            // Set correct answer
+            document.getElementById(`correct-${question.correctAnswer.toLowerCase()}`).checked = true;
+            
+            // Show/hide custom subject
+            if (['Math', 'Science', 'Odia', 'English', 'SST'].includes(question.subject)) {
+                customSubjectContainer.style.display = 'none';
+                questionSubject.value = question.subject;
+            } else {
+                customSubjectContainer.style.display = 'block';
+                questionSubject.value = 'custom';
+                customSubject.value = question.subject;
+            }
+            
+            // Update chapter suggestions
+            updateChapterSuggestions(questionSubject.value);
+            
+            // Switch button visibility
+            saveQuestionBtn.style.display = 'none';
+            updateQuestionBtn.style.display = 'inline-flex';
+            
+            // Scroll to form
+            document.querySelector('.question-form').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function updateQuestion() {
+            if (!state.editingQuestionId) return;
+            
+            // Validate form
+            if (!validateQuestionForm()) {
+                return;
+            }
+            
+            const classValue = questionClass.value;
+            const subjectValue = questionSubject.value === 'custom' ? customSubject.value : questionSubject.value;
+            const chapterValue = questionChapter.value.trim();
+            const questionValue = questionText.value.trim();
+            const options = [
+                optionA.value.trim(),
+                optionB.value.trim(),
+                optionC.value.trim(),
+                optionD.value.trim()
+            ];
+            
+            // Find correct answer
+            let correctAnswer = '';
+            const correctRadios = document.getElementsByName('correct-answer');
+            for (const radio of correctRadios) {
+                if (radio.checked) {
+                    correctAnswer = radio.value;
+                    break;
+                }
+            }
+            
+            // Update question
+            const questionIndex = state.questions.findIndex(q => q.id === state.editingQuestionId);
+            if (questionIndex !== -1) {
+                state.questions[questionIndex] = {
+                    ...state.questions[questionIndex],
+                    class: classValue,
+                    subject: subjectValue,
+                    chapter: chapterValue || 'General',
+                    question: questionValue,
+                    options: options,
+                    correctAnswer: correctAnswer,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                saveQuestions();
+                filterQuestions();
+                
+                // Record activity
+                recordActivity(`Updated question: ${subjectValue} - Class ${classValue}`);
+                
+                alert('Question updated successfully!');
+            }
+            
+            cancelEdit();
+        }
+        
+        function deleteQuestion(id) {
+            if (!confirm('Are you sure you want to delete this question?')) {
+                return;
+            }
+            
+            const question = state.questions.find(q => q.id === id);
+            state.questions = state.questions.filter(q => q.id !== id);
+            saveQuestions();
+            filterQuestions();
+            
+            // Record activity
+            if (question) {
+                recordActivity(`Deleted question: ${question.subject} - Class ${question.class}`);
+            }
+            
+            alert('Question deleted successfully!');
+        }
+        
+        function cancelEdit() {
+            state.editingQuestionId = null;
+            clearQuestionForm();
+            saveQuestionBtn.style.display = 'inline-flex';
+            updateQuestionBtn.style.display = 'none';
+        }
+        
+        function clearQuestionForm() {
+            questionClass.value = '9';
+            questionSubject.value = 'Math';
+            questionChapter.value = '';
+            customSubjectContainer.style.display = 'none';
+            customSubject.value = '';
+            questionText.value = '';
+            optionA.value = '';
+            optionB.value = '';
+            optionC.value = '';
+            optionD.value = '';
+            
+            // Clear radio selection
+            const correctRadios = document.getElementsByName('correct-answer');
+            for (const radio of correctRadios) {
+                radio.checked = false;
+            }
+            
+            if (state.editingQuestionId) {
+                saveQuestionBtn.style.display = 'inline-flex';
+                updateQuestionBtn.style.display = 'none';
+                state.editingQuestionId = null;
+            }
+            
+            // Update chapter suggestions
+            updateChapterSuggestions(questionSubject.value);
+        }
+        
+        function validateQuestionForm() {
+            if (!questionText.value.trim()) {
+                alert('Please enter a question');
+                return false;
+            }
+            
+            if (!optionA.value.trim() || !optionB.value.trim() || !optionC.value.trim() || !optionD.value.trim()) {
+                alert('Please fill in all four options');
+                return false;
+            }
+            
+            if (questionSubject.value === 'custom' && !customSubject.value.trim()) {
+                alert('Please enter a custom subject name');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function filterQuestions() {
+            const classFilter = filterClass.value;
+            const subjectFilter = filterSubject.value;
+            const chapterFilter = filterChapter.value.toLowerCase();
+            
+            let filteredQuestions = state.questions;
+            
+            if (classFilter !== 'all') {
+                filteredQuestions = filteredQuestions.filter(q => q.class === classFilter);
+            }
+            
+            if (subjectFilter !== 'all') {
+                filteredQuestions = filteredQuestions.filter(q => q.subject === subjectFilter);
+            }
+            
+            if (chapterFilter) {
+                filteredQuestions = filteredQuestions.filter(q => 
+                    q.chapter.toLowerCase().includes(chapterFilter)
+                );
+            }
+            
+            renderQuestionsList(filteredQuestions);
+        }
+        
+        function renderQuestionsList(questions) {
+            if (questions.length === 0) {
+                questionsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--govt-gray);">
+                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h4>No questions found</h4>
+                        <p>Create your first question using the form above.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            questionsContainer.innerHTML = '';
+            
+            questions.forEach(question => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question-item';
+                
+                // Determine correct option text
+                const correctIndex = question.correctAnswer.charCodeAt(0) - 65; // A=0, B=1, etc.
+                const correctOptionText = question.options[correctIndex];
+                
+                questionElement.innerHTML = `
+                    <div class="question-header">
+                        <div>
+                            <span class="question-meta">
+                                <span><i class="fas fa-graduation-cap"></i> Class ${question.class}</span>
+                                <span><i class="fas fa-book"></i> ${question.subject}</span>
+                                <span class="chapter-badge"><i class="fas fa-bookmark"></i> ${question.chapter}</span>
+                                <span><i class="fas fa-calendar"></i> ${new Date(question.createdAt).toLocaleDateString()}</span>
+                            </span>
+                        </div>
+                        <div class="question-actions">
+                            <button class="govt-btn govt-btn-secondary btn-sm" onclick="editQuestion(${question.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="govt-btn govt-btn-danger btn-sm" onclick="deleteQuestion(${question.id})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                    <div class="question-text">${escapeHtml(question.question)}</div>
+                    <div class="question-options">
+                        <div class="question-option ${question.correctAnswer === 'A' ? 'correct' : ''}">
+                            <strong>A.</strong> ${escapeHtml(question.options[0])}
+                        </div>
+                        <div class="question-option ${question.correctAnswer === 'B' ? 'correct' : ''}">
+                            <strong>B.</strong> ${escapeHtml(question.options[1])}
+                        </div>
+                        <div class="question-option ${question.correctAnswer === 'C' ? 'correct' : ''}">
+                            <strong>C.</strong> ${escapeHtml(question.options[2])}
+                        </div>
+                        <div class="question-option ${question.correctAnswer === 'D' ? 'correct' : ''}">
+                            <strong>D.</strong> ${escapeHtml(question.options[3])}
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 0.5rem; background-color: #f0f9ff; border-radius: 6px;">
+                        <strong><i class="fas fa-check-circle"></i> Correct Answer:</strong> ${question.correctAnswer}. ${escapeHtml(correctOptionText)}
+                    </div>
+                `;
+                
+                questionsContainer.appendChild(questionElement);
+            });
+        }
+        
+        // Quiz Player Functions
+        function updateAvailableQuestionsCount() {
+            const classFilter = playerClass.value;
+            const subjectFilter = playerSubject.value;
+            const chapterFilter = playerChapter.value.trim().toLowerCase();
+            
+            let filteredQuestions = state.questions;
+            
+            if (classFilter !== 'all') {
+                filteredQuestions = filteredQuestions.filter(q => q.class === classFilter);
+            }
+            
+            if (subjectFilter !== 'all') {
+                filteredQuestions = filteredQuestions.filter(q => q.subject === subjectFilter);
+            }
+            
+            if (chapterFilter) {
+                filteredQuestions = filteredQuestions.filter(q => 
+                    q.chapter.toLowerCase().includes(chapterFilter)
+                );
+            }
+            
+            questionsCount.textContent = filteredQuestions.length;
+            questionsCount.style.color = filteredQuestions.length > 0 ? 'var(--govt-green)' : 'var(--govt-red)';
+        }
+        
+        function startQuiz() {
+            const classFilter = playerClass.value;
+            const subjectFilter = playerSubject.value;
+            const chapterFilter = playerChapter.value.trim().toLowerCase();
+            const length = quizLength.value;
+            
+            // Filter questions
+            let filteredQuestions = state.questions;
+            
+            if (classFilter !== 'all') {
+                filteredQuestions = filteredQuestions.filter(q => q.class === classFilter);
+            }
+            
+            if (subjectFilter !== 'all') {
+                filteredQuestions = filteredQuestions.filter(q => q.subject === subjectFilter);
+            }
+            
+            if (chapterFilter) {
+                filteredQuestions = filteredQuestions.filter(q => 
+                    q.chapter.toLowerCase().includes(chapterFilter)
+                );
+            }
+            
+            if (filteredQuestions.length === 0) {
+                alert('No questions available with the selected filters. Please try different filters.');
+                return;
+            }
+            
+            // Limit number of questions if needed
+            if (length !== 'all' && filteredQuestions.length > parseInt(length)) {
+                // Shuffle and take first N questions
+                filteredQuestions = shuffleArray(filteredQuestions).slice(0, parseInt(length));
+            } else {
+                // Shuffle all questions
+                filteredQuestions = shuffleArray(filteredQuestions);
+            }
+            
+            // Initialize quiz state
+            state.currentQuiz = filteredQuestions;
+            state.currentQuestionIndex = 0;
+            state.userAnswers = new Array(filteredQuestions.length).fill(null);
+            state.quizStartTime = new Date();
+            
+            // Start timer
+            startTimer();
+            
+            // Update UI
+            quizSetup.style.display = 'none';
+            quizInterface.style.display = 'block';
+            resultsScreen.style.display = 'none';
+            
+            // Set quiz info
+            quizTitle.textContent = `${subjectFilter === 'all' ? 'General' : subjectFilter} Quiz`;
+            const chapterText = chapterFilter ? ` | Chapter: ${playerChapter.value}` : '';
+            quizSubtitle.textContent = `Class ${classFilter === 'all' ? 'All' : classFilter} | ${state.currentQuiz.length} Questions${chapterText}`;
+            totalQ.textContent = state.currentQuiz.length;
+            
+            // Show first question
+            displayQuestion();
+            
+            // Record activity
+            recordActivity(`Started a quiz: ${subjectFilter === 'all' ? 'All Subjects' : subjectFilter} - Class ${classFilter === 'all' ? 'All' : classFilter}`);
+        }
+        
+        function displayQuestion() {
+            if (state.currentQuiz.length === 0) return;
+            
+            const question = state.currentQuiz[state.currentQuestionIndex];
+            
+            // Update progress
+            currentQ.textContent = state.currentQuestionIndex + 1;
+            const progress = ((state.currentQuestionIndex) / state.currentQuiz.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            
+            // Update score
+            const currentScoreValue = calculateCurrentScore();
+            currentScore.textContent = currentScoreValue;
+            
+            // Display question
+            questionDisplay.textContent = question.question;
+            chapterNameDisplay.textContent = question.chapter || 'General';
+            
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+            
+            // Create option elements
+            const options = ['A', 'B', 'C', 'D'];
+            options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'quiz-option';
+                if (state.userAnswers[state.currentQuestionIndex] === option) {
+                    optionElement.classList.add('selected');
+                }
+                
+                optionElement.textContent = `${option}. ${question.options[index]}`;
+                optionElement.dataset.option = option;
+                
+                optionElement.addEventListener('click', () => selectOption(option));
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            prevQuestionBtn.disabled = state.currentQuestionIndex === 0;
+            nextQuestionBtn.style.display = state.currentQuestionIndex < state.currentQuiz.length - 1 ? 'inline-flex' : 'none';
+            submitQuizBtn.style.display = state.currentQuestionIndex === state.currentQuiz.length - 1 ? 'inline-flex' : 'none';
+        }
+        
+        function selectOption(option) {
+            // Store user's answer
+            state.userAnswers[state.currentQuestionIndex] = option;
+            
+            // Update UI to show selected option
+            const optionElements = document.querySelectorAll('.quiz-option');
+            optionElements.forEach(el => {
+                el.classList.remove('selected');
+                if (el.dataset.option === option) {
+                    el.classList.add('selected');
+                }
+            });
+        }
+        
+        function showNextQuestion() {
+            if (state.currentQuestionIndex < state.currentQuiz.length - 1) {
+                state.currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+        
+        function showPreviousQuestion() {
+            if (state.currentQuestionIndex > 0) {
+                state.currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+        
+        function submitQuiz() {
+            // Stop timer
+            stopTimer();
+            
+            // Calculate final score
+            const score = calculateCurrentScore();
+            const totalQuestions = state.currentQuiz.length;
+            const percentage = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
+            
+            // Determine message
+            let message = '';
+            if (percentage >= 80) {
+                message = 'Excellent work! You have mastered this topic.';
+            } else if (percentage >= 60) {
+                message = 'Good job! You have a good understanding of this topic.';
+            } else if (percentage >= 40) {
+                message = 'Not bad! Keep practicing to improve.';
+            } else {
+                message = 'Keep studying! Review the material and try again.';
+            }
+            
+            // Calculate time taken
+            const timeTaken = new Date() - state.quizStartTime;
+            const minutes = Math.floor(timeTaken / 60000);
+            const seconds = Math.floor((timeTaken % 60000) / 1000);
+            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Get chapter filter
+            const chapterFilter = playerChapter.value.trim();
+            
+            // Update results screen
+            finalScore.textContent = score;
+            maxScore.textContent = totalQuestions;
+            resultsMessage.textContent = message;
+            resultClass.textContent = playerClass.value === 'all' ? 'All' : playerClass.value;
+            resultSubject.textContent = playerSubject.value === 'all' ? 'All Subjects' : playerSubject.value;
+            resultChapter.textContent = chapterFilter || 'All Chapters';
+            resultAttempted.textContent = totalQuestions;
+            resultCorrect.textContent = score;
+            resultPercentage.textContent = `${percentage.toFixed(1)}%`;
+            resultTime.textContent = timeString;
+            
+            // Show results screen
+            quizInterface.style.display = 'none';
+            resultsScreen.style.display = 'block';
+            
+            // Record activity
+            recordActivity(`Completed quiz: ${score}/${totalQuestions} correct (${percentage.toFixed(0)}%)`);
+        }
+        
+        function calculateCurrentScore() {
+            let score = 0;
+            for (let i = 0; i < state.currentQuiz.length; i++) {
+                if (state.userAnswers[i] === state.currentQuiz[i].correctAnswer) {
+                    score++;
+                }
+            }
+            return score;
+        }
+        
+        function startTimer() {
+            let seconds = 0;
+            
+            state.quizTimer = setInterval(() => {
+                seconds++;
+                const minutes = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+        
+        function stopTimer() {
+            if (state.quizTimer) {
+                clearInterval(state.quizTimer);
+                state.quizTimer = null;
+            }
+        }
+        
+        function restartQuiz() {
+            // Reset to quiz setup
+            quizSetup.style.display = 'block';
+            quizInterface.style.display = 'none';
+            resultsScreen.style.display = 'none';
+            
+            // Reset timer display
+            timeDisplay.textContent = '00:00';
+        }
+        
+        function reviewQuiz() {
+            // For now, just restart the quiz
+            restartQuiz();
+        }
+        
+        // Data Manager Functions
+        function updateStats() {
+            statTotal.textContent = state.questions.length;
+            
+            // Count by class
+            const class9 = state.questions.filter(q => q.class === '9').length;
+            const class10 = state.questions.filter(q => q.class === '10').length;
+            const classCustom = state.questions.filter(q => !['9', '10'].includes(q.class)).length;
+            
+            statClass9.textContent = class9;
+            statClass10.textContent = class10;
+            statClassCustom.textContent = classCustom;
+            
+            // Count by subject
+            const math = state.questions.filter(q => q.subject === 'Math').length;
+            const science = state.questions.filter(q => q.subject === 'Science').length;
+            const odia = state.questions.filter(q => q.subject === 'Odia').length;
+            const english = state.questions.filter(q => q.subject === 'English').length;
+            const sst = state.questions.filter(q => q.subject === 'SST').length;
+            const subjectCustom = state.questions.length - math - science - odia - english - sst;
+            
+            statMath.textContent = math;
+            statScience.textContent = science;
+            statOdia.textContent = odia;
+            statEnglish.textContent = english;
+            statSst.textContent = sst;
+            statSubjectCustom.textContent = subjectCustom;
+            
+            // Count unique chapters
+            const uniqueChapters = [...new Set(state.questions.map(q => q.chapter).filter(Boolean))];
+            statChapters.textContent = uniqueChapters.length;
+        }
+        
+        function exportToCsv() {
+            if (state.questions.length === 0) {
+                alert('No questions to export.');
+                return;
+            }
+            
+            // Create CSV header with chapter column
+            let csv = 'Class,Subject,Chapter,Question,A,B,C,D,Correct\n';
+            
+            // Add each question as a row
+            state.questions.forEach(question => {
+                const row = [
+                    question.class,
+                    question.subject,
+                    `"${question.chapter.replace(/"/g, '""')}"`,
+                    `"${question.question.replace(/"/g, '""')}"`,
+                    `"${question.options[0].replace(/"/g, '""')}"`,
+                    `"${question.options[1].replace(/"/g, '""')}"`,
+                    `"${question.options[2].replace(/"/g, '""')}"`,
+                    `"${question.options[3].replace(/"/g, '""')}"`,
+                    question.correctAnswer
+                ];
+                
+                csv += row.join(',') + '\n';
+            });
+            
+            // Create download link
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `govt_school_quiz_${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Record activity
+            recordActivity('Exported all questions to CSV');
+            
+            alert(`Exported ${state.questions.length} questions to CSV file.`);
+        }
+        
+        function exportToJson() {
+            if (state.questions.length === 0) {
+                alert('No questions to export.');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(state.questions, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `govt_school_quiz_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Record activity
+            recordActivity('Exported all questions to JSON');
+            
+            alert(`Exported ${state.questions.length} questions to JSON file.`);
+        }
+        
+        function printQuestions() {
+            if (state.questions.length === 0) {
+                alert('No questions to print.');
+                return;
+            }
+            
+            // Create print window
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Government School Quiz Questions</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        h1 { color: #1e3a8a; border-bottom: 2px solid #f59e0b; padding-bottom: 10px; }
+                        .question { margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; page-break-inside: avoid; }
+                        .meta { font-size: 0.9em; color: #666; margin-bottom: 10px; }
+                        .options { margin-left: 20px; }
+                        .correct { color: #15803d; font-weight: bold; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Government School Quiz Questions</h1>
+                    <p>Generated on: ${new Date().toLocaleDateString()}</p>
+                    <p>Total Questions: ${state.questions.length}</p>
+                    <hr>
+            `);
+            
+            state.questions.forEach((q, index) => {
+                printWindow.document.write(`
+                    <div class="question">
+                        <div class="meta">
+                            <strong>Q${index + 1}:</strong> Class ${q.class} | ${q.subject} | Chapter: ${q.chapter}
+                        </div>
+                        <p><strong>Question:</strong> ${escapeHtml(q.question)}</p>
+                        <div class="options">
+                            <p>A. ${escapeHtml(q.options[0])}</p>
+                            <p>B. ${escapeHtml(q.options[1])}</p>
+                            <p>C. ${escapeHtml(q.options[2])}</p>
+                            <p>D. ${escapeHtml(q.options[3])}</p>
+                        </div>
+                        <p class="correct">Correct Answer: ${q.correctAnswer}</p>
+                    </div>
+                `);
+            });
+            
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+            
+            // Record activity
+            recordActivity('Printed all questions');
+        }
+        
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const content = e.target.result;
+                    let importedQuestions = [];
+                    
+                    // Check if it's CSV or JSON
+                    if (file.name.endsWith('.json')) {
+                        importedQuestions = JSON.parse(content);
+                    } else {
+                        // Parse CSV
+                        const lines = content.split('\n');
+                        const headers = lines[0].split(',').map(h => h.trim());
+                        
+                        for (let i = 1; i < lines.length; i++) {
+                            if (!lines[i].trim()) continue;
+                            
+                            // Simple CSV parsing (for more robust parsing, a library would be better)
+                            const values = parseCsvLine(lines[i]);
+                            
+                            if (values.length >= 9) {
+                                const question = {
+                                    id: Date.now() + i, // Generate new IDs
+                                    class: values[0].replace(/"/g, ''),
+                                    subject: values[1].replace(/"/g, ''),
+                                    chapter: values[2].replace(/"/g, '') || 'General',
+                                    question: values[3].replace(/"/g, ''),
+                                    options: [
+                                        values[4].replace(/"/g, ''),
+                                        values[5].replace(/"/g, ''),
+                                        values[6].replace(/"/g, ''),
+                                        values[7].replace(/"/g, '')
+                                    ],
+                                    correctAnswer: values[8].replace(/"/g, ''),
+                                    createdAt: new Date().toISOString(),
+                                    imported: true
+                                };
+                                
+                                importedQuestions.push(question);
+                            }
+                        }
+                    }
+                    
+                    // Validate imported questions
+                    const validQuestions = importedQuestions.filter(q => 
+                        q.class && q.subject && q.question && 
+                        q.options && q.options.length === 4 &&
+                        ['A', 'B', 'C', 'D'].includes(q.correctAnswer)
+                    );
+                    
+                    if (validQuestions.length === 0) {
+                        throw new Error('No valid questions found in the file.');
+                    }
+                    
+                    // Add imported questions to existing questions
+                    state.questions.push(...validQuestions);
+                    saveQuestions();
+                    filterQuestions();
+                    
+                    // Show success message
+                    importStatus.innerHTML = `
+                        <div style="background-color: #d1fae5; color: #065f46; padding: 1rem; border-radius: var(--radius);">
+                            <i class="fas fa-check-circle"></i> Successfully imported ${validQuestions.length} questions!
+                        </div>
+                    `;
+                    importStatus.style.display = 'block';
+                    
+                    // Record activity
+                    recordActivity(`Imported ${validQuestions.length} questions from file`);
+                    
+                    // Reset file input
+                    importFile.value = '';
+                    
+                    setTimeout(() => {
+                        importStatus.style.display = 'none';
+                    }, 5000);
+                    
+                } catch (error) {
+                    importStatus.innerHTML = `
+                        <div style="background-color: #fee2e2; color: #991b1b; padding: 1rem; border-radius: var(--radius);">
+                            <i class="fas fa-exclamation-circle"></i> Error importing file: ${error.message}
+                        </div>
+                    `;
+                    importStatus.style.display = 'block';
+                    
+                    // Reset file input
+                    importFile.value = '';
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        function clearAllData() {
+            if (!confirm('Are you sure you want to delete ALL questions? This action cannot be undone.')) {
+                return;
+            }
+            
+            if (!confirm('This will permanently delete all quiz questions. Type "DELETE" to confirm.')) {
+                return;
+            }
+            
+            const confirmation = prompt('Please type "DELETE" to confirm:');
+            if (confirmation !== 'DELETE') {
+                alert('Deletion cancelled.');
+                return;
+            }
+            
+            state.questions = [];
+            saveQuestions();
+            filterQuestions();
+            
+            // Record activity
+            recordActivity('Deleted ALL quiz questions');
+            
+            alert('All questions have been deleted.');
+        }
+        
+        // Helper Functions
+        function insertSymbol(symbol) {
+            const activeElement = document.activeElement;
+            if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+                const start = activeElement.selectionStart;
+                const end = activeElement.selectionEnd;
+                const text = activeElement.value;
+                
+                activeElement.value = text.substring(0, start) + symbol + text.substring(end);
+                activeElement.selectionStart = activeElement.selectionEnd = start + symbol.length;
+                activeElement.focus();
+            }
+        }
+        
+        function recordActivity(activity) {
+            const activities = JSON.parse(localStorage.getItem('eduquiz_activities') || '[]');
+            activities.unshift({
+                activity,
+                timestamp: new Date().toISOString(),
+                user: state.currentUser
+            });
+            
+            // Keep only last 10 activities
+            if (activities.length > 10) {
+                activities.pop();
+            }
+            
+            localStorage.setItem('eduquiz_activities', JSON.stringify(activities));
+            updateRecentActivity();
+        }
+        
+        function updateRecentActivity() {
+            const activities = JSON.parse(localStorage.getItem('eduquiz_activities') || '[]');
+            
+            if (activities.length === 0) {
+                recentActivity.innerHTML = 'No recent activity yet.';
+                return;
+            }
+            
+            let html = '<ul style="list-style-type: none; padding-left: 0;">';
+            activities.slice(0, 5).forEach(activity => {
+                const time = new Date(activity.timestamp).toLocaleString();
+                html += `<li style="margin-bottom: 0.5rem; padding: 0.5rem; background-color: #f3f4f6; border-radius: 6px;">
+                    <i class="fas fa-history" style="color: var(--govt-gray); margin-right: 0.5rem;"></i>
+                    ${activity.activity} <span style="color: var(--govt-gray); font-size: 0.9rem;">(${time})</span>
+                </li>`;
+            });
+            html += '</ul>';
+            
+            recentActivity.innerHTML = html;
+        }
+        
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function parseCsvLine(line) {
+            const values = [];
+            let currentValue = '';
+            let insideQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                const nextChar = line[i + 1];
+                
+                if (char === '"' && insideQuotes && nextChar === '"') {
+                    // Escaped quote
+                    currentValue += '"';
+                    i++; // Skip next char
+                } else if (char === '"') {
+                    // Start or end of quoted value
+                    insideQuotes = !insideQuotes;
+                } else if (char === ',' && !insideQuotes) {
+                    // End of value
+                    values.push(currentValue);
+                    currentValue = '';
+                } else {
+                    // Regular character
+                    currentValue += char;
+                }
+            }
+            
+            // Add the last value
+            values.push(currentValue);
+            
+            return values;
+        }
+        
+        // Make functions available globally for onclick handlers
+        window.editQuestion = editQuestion;
+        window.deleteQuestion = deleteQuestion;
+    </script>
+</body>
+</html>
